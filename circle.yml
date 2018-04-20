@@ -35,8 +35,20 @@ jobs:
             - /opt/android/sdk/platforms/android-P
           key: cache-{{ checksum ".cache-hash" }}
       - run:
-          name: Build and Test
-          command: SKIP_JAVADOC=true ./gradlew clean assemble test --info --stacktrace --continue
+          name: Build
+          command: SKIP_JAVADOC=true ./gradlew clean assemble --info --stacktrace
+      - run:
+          name: Test 1/2
+          command: |
+            SKIP_JAVADOC=true ./gradlew test --info --stacktrace --continue \
+                -Drobolectric.enabledSdks=16,17,18,19,21 -Drobotests.binResultsDir=shard1 \
+                -Drobolectric.alwaysIncludeVariantMarkersInTestName=true
+      - run:
+          name: Test 2/2
+          command: |
+            SKIP_JAVADOC=true ./gradlew test --info --stacktrace --continue \
+                -Drobolectric.enabledSdks=22,23,24,25,26 -Drobotests.binResultsDir=shard2 \
+                -Drobolectric.alwaysIncludeVariantMarkersInTestName=true
       - run:
           name: Collect Test Results
           command: |
