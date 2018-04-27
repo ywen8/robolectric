@@ -6,10 +6,7 @@ import static android.content.pm.PackageManager.GET_SIGNATURES;
 import static android.content.pm.PackageManager.MATCH_DISABLED_COMPONENTS;
 import static android.content.pm.PackageManager.MATCH_UNINSTALLED_PACKAGES;
 import static android.content.pm.PackageManager.SIGNATURE_UNKNOWN_PACKAGE;
-import static android.os.Build.VERSION_CODES.JELLY_BEAN;
-import static android.os.Build.VERSION_CODES.JELLY_BEAN_MR1;
-import static android.os.Build.VERSION_CODES.M;
-import static android.os.Build.VERSION_CODES.N;
+import static android.os.Build.VERSION_CODES.*;
 
 import android.annotation.DrawableRes;
 import android.annotation.NonNull;
@@ -232,7 +229,7 @@ public class ShadowApplicationPackageManager extends ShadowPackageManager {
     return null;
   }
 
-  @Implementation
+  @Implementation(minSdk = LOLLIPOP)
   protected ProviderInfo resolveContentProviderAsUser(
       String name, int flags, @UserIdInt int userId) {
     return null;
@@ -702,7 +699,7 @@ public class ShadowApplicationPackageManager extends ShadowPackageManager {
     verificationResults.put(id, verificationCode);
   }
 
-  @Implementation
+  @Implementation(minSdk = JELLY_BEAN_MR1)
   protected void extendVerificationTimeout(
       int id, int verificationCodeAtTimeout, long millisecondsToDelay) {
     verificationTimeoutExtension.put(id, millisecondsToDelay);
@@ -712,27 +709,27 @@ public class ShadowApplicationPackageManager extends ShadowPackageManager {
   @Override
   protected void freeStorageAndNotify(long freeStorageSize, IPackageDataObserver observer) {}
 
-  @Implementation
+  @Implementation(maxSdk = LOLLIPOP_MR1)
   protected void freeStorageAndNotify(
       String volumeUuid, long freeStorageSize, IPackageDataObserver observer) {}
 
-  @Implementation
+  @Implementation(minSdk = M)
   protected void setInstallerPackageName(String targetPackage, String installerPackageName) {
     packageInstallerMap.put(targetPackage, installerPackageName);
   }
 
-  @Implementation
+  @Implementation(minSdk = KITKAT)
   protected List<ResolveInfo> queryIntentContentProviders(Intent intent, int flags) {
     return Collections.emptyList();
   }
 
-  @Implementation
+  @Implementation(minSdk = KITKAT)
   protected List<ResolveInfo> queryIntentContentProvidersAsUser(
       Intent intent, int flags, int userId) {
     return Collections.emptyList();
   }
 
-  @Implementation
+  @Implementation(minSdk = M)
   protected String getPermissionControllerPackageName() {
     return null;
   }
